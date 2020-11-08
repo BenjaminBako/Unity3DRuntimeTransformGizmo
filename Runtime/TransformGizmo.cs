@@ -42,6 +42,7 @@ namespace RuntimeGizmos
 		public Color allColor = new Color(.7f, .7f, .7f, 0.8f);
 		public Color selectedColor = new Color(1, 1, 0, 0.8f);
 		public Color hoverColor = new Color(1, .75f, 0, 0.8f);
+		public bool outline = true;
 		public float planesOpacity = .5f;
 		//public Color rectPivotColor = new Color(0, 0, 1, 0.8f);
 		//public Color rectCornerColor = new Color(0, 0, 1, 0.8f);
@@ -713,6 +714,8 @@ namespace RuntimeGizmos
 
 		void AddTargetHighlightedRenderers(Transform target)
 		{
+			if(!outline) return;
+			
 			if(target != null)
 			{
 				GetTargetRenderers(target, renderersBuffer);
@@ -751,6 +754,8 @@ namespace RuntimeGizmos
 
 		void ClearAllHighlightedRenderers()
 		{
+			if(!outline) return;
+
 			foreach(var target in targetRoots)
 			{
 				RemoveTargetHighlightedRenderers(target.Key);
