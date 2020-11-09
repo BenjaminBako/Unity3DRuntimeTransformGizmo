@@ -18,7 +18,7 @@ namespace RuntimeGizmos
 		public TransformPivot pivot = TransformPivot.Pivot;
 		public CenterType centerType = CenterType.All;
 		public ScaleType scaleType = ScaleType.FromPoint;
-
+		public bool activateOnClick = true;
 		//These are the same as the unity editor hotkeys
 		public KeyCode SetMoveType = KeyCode.W;
 		public KeyCode SetRotateType = KeyCode.E;
@@ -632,7 +632,9 @@ namespace RuntimeGizmos
 	
 		void GetTarget()
 		{
-			if(nearAxis == Axis.None && Input.GetMouseButtonDown(0))
+            var input = activateOnClick ? Input.GetMouseButtonDown(0) : false;
+
+            if (nearAxis == Axis.None && input)
 			{
 				bool isAdding = Input.GetKey(AddSelection);
 				bool isRemoving = Input.GetKey(RemoveSelection);
@@ -715,7 +717,7 @@ namespace RuntimeGizmos
 		void AddTargetHighlightedRenderers(Transform target)
 		{
 			if(!outline) return;
-			
+
 			if(target != null)
 			{
 				GetTargetRenderers(target, renderersBuffer);
