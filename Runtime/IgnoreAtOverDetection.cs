@@ -1,6 +1,3 @@
 ﻿using UnityEngine;
+public class IgnoreAtOverDetection : MonoBehaviour { }
 
-namespace BimVisualizer.Unity.Shared.Services.PointerService
-{
-    public class IgnoreAtOverDetection : MonoBehaviour { }
-}
