@@ -1,8 +1,10 @@
 using System;
-using UnityEngine;
 using System.Collections.Generic;
 using System.Collections;
 using CommandUndoRedo;
+using System.Linq;
+using UnityEngine;
+using UnityEngine.EventSystems;
 
 namespace RuntimeGizmos
 {
@@ -154,7 +156,8 @@ namespace RuntimeGizmos
 
 		void Update()
 		{
-			HandleUndoRedo();
+            if (IsPointerOverUi()) return;
+            HandleUndoRedo();
 
 			SetSpaceAndType();
 
@@ -175,7 +178,7 @@ namespace RuntimeGizmos
 		void LateUpdate()
 		{
 			if(mainTargetRoot == null) return;
-
+            if(IsPointerOverUi()) return;
 			//We run this in lateupdate since coroutines run after update and we want our gizmos to have the updated target transform position after TransformSelected()
 			SetAxisInfo();
 			
@@ -186,6 +189,19 @@ namespace RuntimeGizmos
 				SetLines();
 			}
 		}
+
+        bool IsPointerOverUi()
+        {
+            var screenRect = new Rect(0, 0, Screen.width, Screen.height);
+            if (!screenRect.Contains(Input.mousePosition)) return true;
+
+            var eventDataCurrentPosition = new PointerEventData(EventSystem.current) { position = new Vector2(Input.mousePosition.x, Input.mousePosition.y) };
+            var results = new List<RaycastResult>();
+
+            EventSystem.current.RaycastAll(eventDataCurrentPosition, results);
+
+            return results.Any(r => r.gameObject.transform.root.GetComponent<IgnoreAtOverDetection>() is null);
+        }
 
 		void OnPostRender()
 		{
